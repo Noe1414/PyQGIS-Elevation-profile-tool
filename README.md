@@ -1,6 +1,6 @@
 # Elevation profile tool
 
-**WARNING : This code has to be run with the QGIS Python console. An error will occur if the code is run outside the application**
+**WARNING : This code has to be run inside the QGIS Python console. An error will occur if the code is run outside the application**
 
 The purpose of this code is to create an elevation profile figure just by using a shapefile. 
 The API used to get the elevation is from the IGN (Institut national de l'information géographique et forestière).
