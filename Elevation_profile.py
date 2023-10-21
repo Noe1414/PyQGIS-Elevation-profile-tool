@@ -20,6 +20,11 @@ from qgis.PyQt.QtCore import (
 )
 from qgis.core import QgsProject, QgsLayout, QgsLayoutAtlas, QgsExpressionContext, QgsProject, QgsExpressionContextUtils, QgsLayoutItemMap
 
+#To modify depending on the number of elements in the polyline
+#If the polyline has already a lot of elements, let this parameter to one, otherwise, increase it
+densifyParameter=1
+
+
 
 # Display a file dialog for opening a file
 file_dialog = QFileDialog()
@@ -71,6 +76,8 @@ def calculate_segment_lengths(layer):
     for feature in layer.getFeatures():
         res=[]
         geometry = feature.geometry()
+        print('Type:',geometry.wkbType())
+        print('Type2:',geometry.type())
         if geometry.wkbType() == 2:
             multi_line = geometry.asPolyline()
             
@@ -211,7 +218,7 @@ if layer.isValid():
         
         length = original_geometry.length()
         # Modifier la géométrie selon vos besoins
-        modified_geometry = original_geometry.densifyByDistance(length/250)
+        modified_geometry = original_geometry.densifyByDistance(length/densifyParameter)
         # Ajouter la nouvelle géométrie au dictionnaire de valeurs de géométrie
         geometry_values[feature_id] = modified_geometry
         
@@ -223,6 +230,7 @@ if layer.isValid():
 json_data = layer_to_json(couche_transformee)
 segment_lengths = calculate_segment_lengths(couche_transformee)
 
+print(len(segment_lengths))
 # Iterate every element of the layer
 for i in range(len(json.loads(json_data)["features"])):
     x=[0]
@@ -244,15 +252,27 @@ for i in range(len(json.loads(json_data)["features"])):
     
     #The number of values we input in the API is limitated, so we will separate the list in 2 to do 2 requests and improve the precision of the elevation profile
 
-    l = round(len(latitude)/2)
+    l = round(len(latitude)/6)
     latitude1 = latitude[:l]
-    latitude2 = latitude[l:]
+    latitude2 = latitude[l:2*l]
+    latitude3 = latitude[2*l:3*l]
+    latitude4 = latitude[3*l:4*l]
+    latitude5 = latitude[4*l:5*l]
+    latitude6 = latitude[5*l:]
     longitude1 = longitude[:l]
-    longitude2 = longitude[l:]
+    longitude2 = longitude[l:2*l]
+    longitude3 = longitude[2*l:3*l]
+    longitude4 = longitude[3*l:4*l]
+    longitude5 = longitude[4*l:5*l]
+    longitude6 = longitude[5*l:]
     altitude1 = get_elevation(latitude1, longitude1)
     altitude2 = get_elevation(latitude2, longitude2)
+    altitude3 = get_elevation(latitude3, longitude3)
+    altitude4 = get_elevation(latitude4, longitude4)
+    altitude5 = get_elevation(latitude5, longitude5)
+    altitude6 = get_elevation(latitude6, longitude6)
     
-    altitude = altitude1 + altitude2
+    altitude = altitude1 + altitude2 + altitude3 + altitude4 + altitude5 + altitude6
 
     # Données pour l'axe des abscisses (x) et des ordonnées (y)
 
