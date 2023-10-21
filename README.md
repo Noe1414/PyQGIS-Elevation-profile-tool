@@ -9,6 +9,8 @@ As a consequence, **this elevation profile tool will only work with shapefile da
 
 When the code is run, the user can choose if he wants to export the data in a .csv  file as well.
 
+Every API request can handle ~175 values. 
+
 ## How it works 
 
 Here are the different steps of the code in order to go from a *.shp* file to an elevation profile :
