@@ -9,7 +9,7 @@ As a consequence, **this elevation profile tool will only work with shapefile da
 
 When the code is run, the user can choose if he wants to export the data in a .csv  file as well.
 
-Every API request can handle ~175 values. 
+Every API request can handle ~175 values. The data is split in a way that the code can handle ~1000 values.
 
 ## How it works 
 
